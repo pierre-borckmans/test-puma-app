@@ -31,6 +31,19 @@ on_worker_boot do
   ActiveRecord::Base.establish_connection if defined?(ActiveRecord)
 end
 
+quiet false  # Enable shutdown logging
+enable_shutdown_hooks
+
+on_worker_shutdown do
+  # Force exit worker
+  exit(0)
+end
+
+lowlevel_error_handler do |e|
+  # Force exit on errors
+  exit(1)
+end
+
 threads_count = ENV.fetch("RAILS_MAX_THREADS", 3)
 threads threads_count, threads_count
 
