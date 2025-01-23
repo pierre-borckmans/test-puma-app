@@ -31,10 +31,6 @@ on_worker_boot do
   ActiveRecord::Base.establish_connection if defined?(ActiveRecord)
 end
 
-on_worker_shutdown do
-  ActiveRecord::Base.connection.disconnect! if defined?(ActiveRecord)
-end
-
 threads_count = ENV.fetch("RAILS_MAX_THREADS", 3)
 threads threads_count, threads_count
 
